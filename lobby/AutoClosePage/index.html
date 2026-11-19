@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Auto Close Page</h2>
+
+<p id="demo"></p>
+
+<script>
+    document.getElementById("demo").innerHTML = 10;
+    var t = 10;
+    var intervalId  = setInterval(function(){
+        t--;
+        document.getElementById("demo").innerHTML = t;
+        if(t == -1){
+            if(window.parent != window.self && window.parent.closeGamePage){
+                window.parent.closeGamePage();
+                document.getElementById("demo").innerHTML = "Call Close Game Page Function";
+            }
+            else if(window.parent == window.self){
+                document.getElementById("demo").innerHTML = "parent == window.self";
+            }
+            else if(!window.parent.closeGamePage){
+                document.getElementById("demo").innerHTML = "parent.closeGamePage == undefine";
+            }
+            clearInterval(intervalId);
+        }
+    }, 1000)
+
+</script>
+
+</body>
+</html>
+

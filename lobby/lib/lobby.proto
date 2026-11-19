@@ -1,0 +1,245 @@
+syntax = "proto2";
+
+message Level{
+    enum Code{
+	    kSilver  = 0;
+	    kGold    = 1;
+	    kRuby    = 2;
+	    kDiamond = 3;
+    }
+    required uint32 code       = 1;
+    required uint32 percentage = 2;
+}
+
+    message Medal{
+    enum Code{
+	    kBrown  = 0;
+	    kSilver = 1;
+	    kGold   = 2;
+    }
+    required Code   code  = 1;
+    required uint32 count = 2;
+}
+
+message Mail{
+    enum Type {
+        kNotify = 0;
+        kReward = 1;
+    }
+    message MultiLangText {
+        required string eng = 1;
+        required string sch = 2;
+        required string tch = 3;
+    }
+    required uint64 id              = 1;
+    required MultiLangText title    = 2; // 多語系文字
+    required bool   is_read         = 3;
+    required uint64 date            = 4;
+    required MultiLangText content  = 5; // 多語系文字
+    required Type type              = 6;
+}
+
+message GameInfo{
+    enum Label{
+        kNew       = 1;
+        kHot       = 2;
+        kChallenge = 4;
+        kAsia      = 8;
+    }
+    enum Class{
+        kTodaySpecial = 1;
+        kFavorite     = 2;
+        kPsReward     = 4;
+        kVipOnly      = 8;
+        kHighlight    = 16;  // 今日特選 (大圖示)
+    }
+    required string  id    = 1;
+    required uint32  subid = 2;
+    required uint32  label = 3;
+    required uint32  class = 4;
+    required uint32  required_level = 5;  // 最低等級限制 (鎖圖示)
+    optional uint32  favorite_order = 6;  // [新增] 我的最愛排序
+    optional bool    disable = 7;
+    optional string  type = 8; // SLOT: 老虎機, CARD: 棋牌
+    optional uint32  commission_type = 9; // 百家樂類型 0: 一般, 1: 免傭
+    optional uint32  order = 10;
+}
+
+
+message MemberInfo{
+    required string     id               = 1;
+    required Level      level            = 2;
+    repeated Medal      medal_group      = 3;
+    required uint64     cent             = 4;
+    required uint32     ps_coin          = 5;
+    repeated GameInfo   game_info_group  = 6;
+    required uint64     psaward_deadline = 7;
+    required int32      spin_times       = 8;
+    repeated Medal      week_medal_group = 9;  // [新增]週期徽章總數
+    optional uint32     week_ps_coin     = 10; // [新增] 週期兌換總數
+}
+
+message SystemInfo{
+  required uint32             ps_coin_value = 1;
+  repeated BigChallenge.Wheel wheel_group   = 2;
+  optional uint32             accounting_unit = 3;
+  optional uint64             degrade_check_bet = 4;
+}
+
+message BigChallenge{
+    enum AwardType{
+        kPay          = 0;
+        kTrigGame     = 1;
+        kTrigInternal = 2;
+        kRandomPay    = 3;
+    }
+    message TriggerGame{
+        enum GameType{
+            kBase  = 0;
+            kBonus = 1;
+        }
+        required string   game_id    = 1;
+        required uint32   subgame_id = 2;
+        required GameType game_type  = 3;
+        required uint32   total_times = 4;   // 贏得免費遊戲場次
+        optional uint32   played_times = 5;  // 已經玩過的場次
+    }
+    message Award{
+        required AwardType   type         = 1;
+        required uint32      id           = 2;
+        optional uint64      pay          = 3;
+        optional TriggerGame trigger_game = 4;
+        repeated uint64      random_pay   = 5;
+    }
+    message Wheel{
+        required uint32     level_code = 1;
+        required uint32     ps_coin    = 2;
+        repeated Award      internal   = 3;
+        repeated Award      external   = 4;
+    }
+    message Result{
+        required AwardType   type         = 1;
+        required uint32      id           = 2;
+        optional uint64      pay          = 3;
+        optional TriggerGame trigger_game = 4;
+    }
+}
+
+enum ErrorCode {
+  kSuccess         = 0;
+  kInvalid         = 1;
+  kOffline         = 2;
+  kNoEnoughBalance = 3;
+  kHostError       = 4;
+  kLevelError      = 5;
+  kUnfinished      = 6;  // PS大挑戰免費遊戲尚未結束
+  kLimitExceeded   = 7;
+}
+
+enum MessageId {
+  kLoginCall          = 1000;
+  kLoginRecall        = 1001;
+  kMailCall           = 1002;
+  kMailRecall         = 1003;
+  kBigChallengeCall   = 1004;
+  kBigChallengeRecall = 1005;
+  kSuicideCall        = 1006;
+  kForceUpdateCall    = 1007;
+  kUpdateData         = 2001;
+  kJackpotInfo        = 2002;
+}
+
+message JackpotInfo {
+    message Pool {
+        required int32 id = 1; // 依獎項大小順序 (由小到大)
+        required uint64 current_cent = 2; // 目前累積金額
+        required bool enable = 3;  // 是否開啟
+    }
+    required MessageId msgid = 1 [default=kJackpotInfo];
+    repeated Pool pool_list = 2;  // Jackpot 獎池列表
+}
+
+message Header{
+	required MessageId msg_id = 1;
+}
+
+message LoginCall{
+	required MessageId msg_id     = 1[default=kLoginCall];
+	optional string    member_id  = 2;
+	optional string    password   = 3;
+	optional string    token      = 4;
+}
+
+message LoginRecall{
+	required MessageId  msg_id      = 1[default=kLoginRecall];
+	optional ErrorCode  error_code  = 2;
+	optional string     token       = 3;
+	optional MemberInfo member_info = 4;
+	optional SystemInfo system_info = 5;
+	repeated Mail       mail_box    = 6;
+    repeated BannerInfo banner_info = 7;
+    repeated BigChallenge.Result last_result = 8;  // 最後一場結果 (有還沒玩完的免費遊戲才會傳)
+    optional bool                cent_deducted = 9; // [新增] true = 使用真錢 (last_result 有值才會填這個欄位)
+}
+
+message UpdateData{
+	required MessageId  msg_id      = 1[default=kUpdateData];
+	repeated Mail       mail_box    = 2;
+	optional MemberInfo member_info = 3;
+    repeated BannerInfo banner_info = 4;
+}
+
+message MailCall{
+	required MessageId msg_id  = 1[default=kMailCall];
+	required string    token   = 2;
+    required uint64    mail_id = 3;
+}
+
+message MailRecall{
+	required MessageId msg_id      = 1[default=kMailRecall];
+	required ErrorCode error_code  = 2;
+    required uint64    mail_id     = 3;
+}
+
+message BigChallengeCall{
+	required MessageId  msg_id     = 1[default=kBigChallengeCall];
+	required string     token      = 2;
+  required uint32       level_code = 3;
+  required uint32     ps_coin    = 4;
+}
+
+message BigChallengeRecall{
+	required MessageId           msg_id      = 1[default=kBigChallengeRecall];
+	required ErrorCode           error_code  = 2;
+    optional MemberInfo          member_info = 3;
+    repeated BigChallenge.Result result      = 4;
+    optional bool                cent_deducted = 5; // [新增] true = 使用真錢
+}
+
+message SuicideCall{
+	required MessageId msg_id     = 1[default=kSuicideCall];
+}
+
+message ForceUpdateCall{
+	required MessageId msg_id     = 1[default=kForceUpdateCall];
+}
+
+message BannerInfo {
+    enum Type {
+        kTopStars = 0; // 排行榜 (遊戲贏分或 Jackpot)  //目前只做排行榜
+        kActivity = 1; // 活動訊息
+    }
+    message MultiLangText {
+        required string eng = 1; // 英文
+        required string sch = 2; // 簡中
+        required string tch = 3; // 繁中
+    }
+    required Type type = 1;
+    optional string member_id = 2; // 玩家帳號
+    optional uint32 bet = 3; // 押注 (cent)
+    optional uint64 win = 4; // 贏分 (cent)
+    optional MultiLangText game_name = 5; // 遊戲名稱
+    optional uint64 jp_win = 6; // Jackpot 贏分
+    optional string image_name = 7; // 活動圖片名稱 (不含副檔名)
+    optional string url = 8; // 活動網址
+}

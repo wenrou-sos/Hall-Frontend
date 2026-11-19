@@ -1,0 +1,239 @@
+syntax = "proto2";
+
+enum EMSGID {
+  eLoginCall    = 100;
+  eLoginRecall  = 101;
+  eConfigCall   = 102;
+  eConfigRecall = 103;
+  eStripsCall   = 104; 
+  eStripsRecall = 105;
+  eResultCall   = 106;
+  eResultRecall = 107;
+  eOptionCall   = 108;
+  eOptionRecall = 109;
+  eCheckCall    = 110;
+  eCheckRecall  = 111;
+  eStateCall    = 112;
+  eStateRecall  = 113;
+  eCentInAsk    = 200;
+  eCentInReask  = 201; 
+  eJackpotInfo  = 202;
+}
+
+enum ESTATEID {
+  K_IDLE = 0;
+  K_SPIN = 1;
+  K_SPINSTOPING = 2;
+  K_PRE_SHOWWIN = 3;
+  K_SHOWWIN = 4;
+  K_WAIT = 5;
+  K_FEATURE_TRIGGER = 6;
+  K_FEATURE_SHOWSCATTERWIN = 7;
+  K_FEATURE_TRANSLATE = 8;
+  K_FEATURE_WAIT_START = 9;
+  K_FEATURE_SPIN = 10;
+  K_FEATURE_SPINSTOPING = 11;
+  K_FEATURE_PRE_SHOWWIN = 12;
+  K_FEATURE_SHOWWIN = 13;
+  K_FEATURE_WAIT = 14;
+  K_FEATURE_CHEKRESULT = 15;
+  K_FEATURE_RETRIGGER = 16;
+  K_FEATURE_SHOW_RETIGGER = 17;
+  K_ENDGAME = 18;
+  K_USER_DEF1=19;
+  K_USER_DEF2=20;
+  K_USER_DEF3=21;
+  K_USER_DEF4=22;
+  K_USER_DEF5=23;
+  K_USER_DEF6=24;
+  K_USER_DEF7=25;
+  K_USER_DEF8=26;
+  K_USER_DEF9=27;
+}
+
+message Status {
+  enum Code {
+    kSuccess = 0;
+    kInvalid = 1;
+    kOffline = 2;
+    kNoEnoughCredit = 3;
+  }
+}
+
+message Header{
+  required EMSGID msgid=1;
+}
+ 
+// Client to Server ------------------------------------------------- 
+
+message LoginCall {
+  required EMSGID msgid=1 [default=eLoginCall];
+  required string member_id = 2;
+  required string password = 3;
+  required string machine_id = 4;
+  optional string token = 5;
+}
+
+message LoginRecall {
+  required EMSGID msgid=1 [default=eLoginRecall];
+  required Status.Code status_code = 2;
+  optional string token = 3;
+}
+
+message ConfigCall {
+  required EMSGID msgid=1 [default=eConfigCall];
+  required string token = 2;
+  required string gameid = 3;
+}
+
+message ConfigRecall {
+  required EMSGID msgid=1 [default=eConfigRecall];
+  required Status.Code status_code = 2;
+  repeated int32 bet_5_arr = 3;
+  repeated int32 line_5_arr = 4;
+  repeated int32 rate_arr = 5;
+  optional int32 rate_default_index = 6;
+  repeated string language_list = 7;
+  optional int32 language_default_index = 8;
+  optional uint64 player_cent = 9;
+  repeated int32 last_rng = 10;
+}
+
+message StripsCall {
+  required EMSGID msgid=1 [default=eStripsCall];
+  required string token = 2;
+}
+
+message StripsRecall {
+  required EMSGID msgid=1 [default=eStripsRecall];
+  required Status.Code status_code = 2;
+  message StripData {
+    message Strip {
+      repeated int32 strip_arr = 1;
+    }
+    required string module_id = 1;
+    repeated Strip strips = 2;
+  }
+  repeated StripData allstrips = 3;
+}
+
+message ResultCall {
+  required EMSGID msgid=1 [default=eResultCall];
+  required string token = 2;
+  required string module_id = 3;
+  required int32 bet = 4;
+  required int32 line = 5;
+  required int32 rate = 6;
+}
+
+message ResultRecall {
+  required EMSGID msgid=1 [default=eResultRecall];
+  required Status.Code status_code = 2;
+  enum WinLineType {
+    kCommon = 0;
+    kXTotalBet = 1;
+    kXTotalBetTrigger = 2;
+  }
+  message WinLinePos {
+    repeated int32 pos = 1;
+  }
+  optional uint64 cur_player_cent = 3;
+  repeated int32 rng = 4;
+  repeated WinLinePos win_linepos_list = 5;
+  repeated int32 win_linecredit_list=6;
+  repeated int32 win_lineno_list = 7;
+  repeated int32 win_linesyb_list = 8;
+  repeated WinLineType win_linetype_list = 9;
+  repeated int32 win_linemultiplier_list = 10;
+  optional string win_nextmodule = 11;
+  repeated int32 win_n_of_totaltimes = 12;
+  optional uint64 win_totalcredit = 13;
+  repeated int32 mulitplier_pattern=14;
+  optional int32 multiplier_alone=15;
+  repeated int32 random_syb_pattern=16;
+  optional int32 bonus_multiplier=17;
+}
+
+enum OPTION_MODE {
+  eGetSpins = 1;
+  eGetMultiplier = 2;
+  eGetSpinandMultiplier = 3;
+}
+
+message OptionCall {
+  required EMSGID msgid = 1 [default=eOptionCall];
+  required string token = 2;
+  required int32 player_opt_index = 3;
+  required OPTION_MODE opt_mode = 4 [default=eGetSpins];
+}
+
+message OptionRecall {
+  required EMSGID msgid=1 [default=eOptionRecall];
+  required Status.Code status_code = 2;
+  optional int32 player_opt_index=3;
+  repeated int32 multiplier = 4;
+  repeated int32 earn_times = 5;
+  optional string win_nextmodule = 6;
+}
+
+message CheckCall {
+  required EMSGID msgid=1 [default=eCheckCall];
+  required string token = 2;
+  required uint64 cur_player_cent = 3;
+}
+
+message CheckRecall {
+  required EMSGID msgid=1 [default=eCheckRecall];
+  required Status.Code status_code = 2;
+}
+
+message StateCall {
+  required EMSGID msgid = 1 [default=eStateCall];
+  required string token = 2;
+  required ESTATEID stateid = 3;
+  repeated int32 reserved = 4;
+}
+
+message StateRecall {
+  required EMSGID msgid = 1 [default=eStateRecall];
+  required Status.Code status_code = 2;
+}
+
+message PayTableCall {
+}
+
+message PayTableRecall {
+}
+
+// Server to Client -------------------------------------------------
+enum ECENTINTYPE {
+  eGeneral = 0;
+  eJackpot = 1;
+}
+
+message CentInAsk {
+  required EMSGID msgid=1 [default=eCentInAsk];
+  required ECENTINTYPE type = 2;
+  required uint64 tid = 3;
+  required uint64 cent = 4;
+  optional int32 pool_id = 5;
+}
+
+message CentInReask {
+  required EMSGID msgid = 1 [default=eCentInReask];
+  required ECENTINTYPE type = 2;
+  required uint64 tid = 3;
+}
+
+message Pool {
+  required int32 id = 1;
+  required string name = 2;
+  required uint64 current_cent = 3;
+  required bool enable = 4;
+}
+
+message JackpotInfo {
+  required EMSGID msgid = 1 [default=eJackpotInfo];
+  repeated Pool pool_list = 2;
+  required Status.Code status_code = 3;
+}

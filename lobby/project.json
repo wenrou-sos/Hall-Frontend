@@ -1,0 +1,45 @@
+{
+    "project_type": "javascript",
+
+    "debugMode" : 1,
+    "showFPS" : false,
+    "frameRate" : 50,
+    "id" : "gameCanvas",
+    "renderMode" : 1,
+    "engineDir":"frameworks/cocos2d-html5",
+    "modules" : ["cocos2d", "ccui" , "spine"],
+    "jsList" : [
+        "lib/Long.min.js",
+        "lib/ByteBufferAB.min.js",
+        "lib/ProtoBuf.min.js",
+        "src/ui.js",
+        "src/globalFunction.js",
+        "src/core.js",
+        "src/proto.js",
+        "src/fakeBigChallengeMath.js",
+        "src/model.js",
+        "src/winParticles.js",
+        "src/medal/medal_resource.js",
+        "src/medal/medal_main.js",
+        "src/jp/jp_resource.js",
+        "src/resource.js",
+        "src/bigChallengeWheel.js",
+        "src/bigChallenge.js",
+        "src/mail.js",
+        "src/filterAndLayout.js",
+        "src/gameItem.js",
+        "src/gameWall.js",
+        "src/interface.js",
+        "src/help.js",
+        "src/mainPage.js",
+        "src/pay_table_config.js",
+        "src/app.js",
+        "src/ps_goldenTicket.js",
+
+        "src/jp/jp_digi_num.js",
+        "src/jp/jp_ly_nums.js",
+        "src/jp/jp_ly_banner.js",
+
+        "src/lib/loader/loader_scene.js"
+    ]
+}
