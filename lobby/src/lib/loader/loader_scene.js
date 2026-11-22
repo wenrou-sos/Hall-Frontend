@@ -54,7 +54,7 @@ var LoaderScene = cc.Scene.extend({
         ps.DEVICE_MODE = BK.DEVICE_MODE || 0;
         var width = $(window).width();
         var height = $(window).height();
-        ps.DEVICE_MODE=(width > height) ? 0 : 1;
+        ps.DEVICE_MODE=0;
         var isPSTM = DEF_GAMEID.indexOf("PSTM") !== -1 ? true:false;
         var isPSM  = DEF_GAMEID.indexOf("PSM") !== -1 ? true:false;
         var isCoinMater = DEF_GAMEID.indexOf("133") !== -1 ? true:false;

@@ -368,7 +368,7 @@ pslb.OpenRealGame = function(id,sub_id){
 /*It is modified when publishing*/
 pslb.GetLang = function(){ var m = window.location.search.match(/[?&]lang=([^&]+)/); if (m) return m[1]; return (window.localStorage && localStorage.getItem("ps_lang")) || "sch"; };
 pslb.BuildWebSocket = function(onsuccess){
-    var socket = new WebSocket("ws://127.0.0.1:8084/lobby");
+    var socket = new WebSocket("ws://" + window.location.host + "/ws/lobby");
     socket.binaryType = "arraybuffer";
     socket.onopen = function(){ onsuccess(socket);};
 };
@@ -377,19 +377,44 @@ pslb.BuildWebSocket = function(onsuccess){
 pslb.BuildLaunchURL=function(game_id, subgame_id) {
     //return "./AutoClosePage/";
 
-    if (game_id === "PSF-ON-00001") { return "http://127.0.0.1:8080/?access_token=dev&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
-    if (game_id === "PSC-ON-00001") { return "http://127.0.0.1:8085/?access_token=dev&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
-    if (game_id === "PSF-ON-00002") { return "http://127.0.0.1:8086/?access_token=dev&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
-    if (game_id === "PSF-ON-00003") { return "http://127.0.0.1:8087/?access_token=dev&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
-    if (game_id === "PSF-ON-00004") { return "http://127.0.0.1:8088/?access_token=dev&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
-    if (game_id === "PSF-ON-00005") { return "http://127.0.0.1:8089/?access_token=dev&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
-    if (game_id === "PSF-ON-00006") { return "http://127.0.0.1:8090/?access_token=dev&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
-    if (game_id === "PSF-ON-00007") { return "http://127.0.0.1:8091/?access_token=dev&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
-    if (game_id === "PSC-ON-00007") { return "http://127.0.0.1:8094/?access_token=dev&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
-    if (game_id === "PSC-ON-00008") { return "http://127.0.0.1:8095/?access_token=dev&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
-    if (game_id === "PSC-ON-00013") { return "http://127.0.0.1:8099/?access_token=dev&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
-    if (game_id === "PSC-ON-00014") { return "http://127.0.0.1:8100/?access_token=dev&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
-    if (game_id === "PSC-ON-00016") { return "http://127.0.0.1:8102/?access_token=dev&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSF-ON-00001") { return window.location.origin + "/g/PSF-ON-00001/?access_token=dev&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSC-ON-00001") { return window.location.origin + "/g/PSC-ON-00001/?access_token=dev&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSF-ON-00002") { return window.location.origin + "/g/PSF-ON-00002/?access_token=dev&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSF-ON-00003") { return window.location.origin + "/g/PSF-ON-00003/?access_token=dev&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSF-ON-00004") { return window.location.origin + "/g/PSF-ON-00004/?access_token=dev&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSF-ON-00005") { return window.location.origin + "/g/PSF-ON-00005/?access_token=dev&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSF-ON-00006") { return window.location.origin + "/g/PSF-ON-00006/?access_token=dev&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSF-ON-00007") { return window.location.origin + "/g/PSF-ON-00007/?access_token=dev&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSC-ON-00007") { return window.location.origin + "/g/PSC-ON-00007/?access_token=dev&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSC-ON-00008") { return window.location.origin + "/g/PSC-ON-00008/?access_token=dev&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSC-ON-00013") { return window.location.origin + "/g/PSC-ON-00013/?access_token=dev&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSC-ON-00014") { return window.location.origin + "/g/PSC-ON-00014/?access_token=dev&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSC-ON-00016") { return window.location.origin + "/g/PSC-ON-00016/?access_token=dev&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSC-ON-00009") { return window.location.origin + "/g/PSC-ON-00009/?access_token=***&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSS-APP-00009") { return window.location.origin + "/g/PSS-APP-00009/?access_token=***&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSS-APP-00019") { return window.location.origin + "/g/PSS-APP-00019/?access_token=***&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSS-APP-00025") { return window.location.origin + "/g/PSS-APP-00025/?access_token=***&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSS-APP-00035") { return window.location.origin + "/g/PSS-APP-00035/?access_token=***&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSS-APP-00065") { return window.location.origin + "/g/PSS-APP-00065/?access_token=***&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSS-APP-00104") { return window.location.origin + "/g/PSS-APP-00104/?access_token=***&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSS-APP-00110") { return window.location.origin + "/g/PSS-APP-00110/?access_token=***&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSS-APP-00111") { return window.location.origin + "/g/PSS-APP-00111/?access_token=***&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSS-APP-00112") { return window.location.origin + "/g/PSS-APP-00112/?access_token=***&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSS-ON-00147") { return window.location.origin + "/g/PSS-ON-00147/?access_token=***&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSS-ON-00148") { return window.location.origin + "/g/PSS-ON-00148/?access_token=***&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSS-ON-00149") { return window.location.origin + "/g/PSS-ON-00149/?access_token=***&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSS-ON-00150") { return window.location.origin + "/g/PSS-ON-00150/?access_token=***&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSS-ON-00152") { return window.location.origin + "/g/PSS-ON-00152/?access_token=***&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSS-ON-00153") { return window.location.origin + "/g/PSS-ON-00153/?access_token=***&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSS-ON-00154") { return window.location.origin + "/g/PSS-ON-00154/?access_token=***&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "kys-h5-99988") { return window.location.origin + "/g/kys-h5-99988/?access_token=***&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "kys-h5-99989") { return window.location.origin + "/g/kys-h5-99989/?access_token=***&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "kys-h5-99990") { return window.location.origin + "/g/kys-h5-99990/?access_token=***&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "kys-h5-99993") { return window.location.origin + "/g/kys-h5-99993/?access_token=***&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "kys-h5-99998") { return window.location.origin + "/g/kys-h5-99998/?access_token=***&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "kys-h5-99999") { return window.location.origin + "/g/kys-h5-99999/?access_token=***&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSC-ON-00016-new") { return window.location.origin + "/g/PSC-ON-00016-new/?access_token=***&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
+    if (game_id === "PSS-ON-00019") { return window.location.origin + "/g/PSS-ON-00019/?access_token=***&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
     return "./AutoClosePage/";
 
 };

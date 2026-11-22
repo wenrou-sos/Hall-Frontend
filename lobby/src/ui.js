@@ -3,7 +3,7 @@ BK.WIN_WIDTH=1280;
 BK.WIN_HEIGHT=768;
 
 //mode = 0  橫式 , mode = 1  直式
-BK.DEVICE_MODE=(BK.WIN_WIDTH>BK.WIN_HEIGHT)?0:1;
+BK.DEVICE_MODE=0;
 BK.WIN_CENTER_X=BK.WIN_WIDTH/2;
 BK.WIN_CENTER_Y=BK.WIN_HEIGHT/2;
 BK.TESTMODE = 0;
@@ -45,11 +45,11 @@ $(document).ready(function() {
     var width=0;
     resizeTimer = window.setInterval( function () {
         var height = $(window).height();
-        if (width != $(window).width() ){
+        if (Math.abs(width - $(window).width()) > 40 /*repair41: ignore scrollbar jitter*/ ){ /*repair39: tolerate address-bar jitter*/
             width = $(window).width();
             ui_init_Size();
         }
-    },20)
+    },250) /*repair39*/
 
 });
 
@@ -57,7 +57,7 @@ function ui_init_Size() {
     var width = $(window).width();
     var height = $(window).height();
     var last_device_mode=BK.DEVICE_MODE;
-    BK.DEVICE_MODE = (width > height) ? 0 : 1;
+    BK.DEVICE_MODE =0;
     if (BK.Only_Vertical) BK.DEVICE_MODE = 1;
     var is_different_device_mode = (last_device_mode!==BK.DEVICE_MODE)? true:false;
     var is_different_size = (is_different_device_mode|| (width!==BK.WIN_WIDTH || height!==BK.WIN_HEIGHT))? true:false;
