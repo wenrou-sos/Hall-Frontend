@@ -415,6 +415,6 @@ pslb.BuildLaunchURL=function(game_id, subgame_id) {
     if (game_id === "kys-h5-99999") { return window.location.origin + "/g/kys-h5-99999/?access_token=***&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
     if (game_id === "PSC-ON-00016-new") { return window.location.origin + "/g/PSC-ON-00016-new/?access_token=***&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
     if (game_id === "PSS-ON-00019") { return window.location.origin + "/g/PSS-ON-00019/?access_token=***&subid=" + subgame_id + "&lang=" + pslb.GetLang(); }
-    return "./AutoClosePage/";
+    return window.location.origin + "/g/" + game_id + "/?access_token=dev&subid=" + subgame_id + "&lang=" + pslb.GetLang(); /*repair50: generic launch for all whitelisted games*/
 
 };
